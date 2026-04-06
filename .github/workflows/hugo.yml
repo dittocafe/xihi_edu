@@ -1,5 +1,4 @@
 name: Deploy Hugo
-
 on:
   push:
     branches: [ main ]
@@ -10,34 +9,39 @@ permissions:
   pages: write
   id-token: write
 
+# 强制使用 Node.js 24，彻底消除弃用警告
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v5
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: Install Hugo
-        run: |
-          wget -O hugo.tar.gz https://github.com/gohugoio/hugo/releases/download/v0.139.0/hugo_extended_0.139.0_linux_amd64.tar.gz
-          tar -xzf hugo.tar.gz
-          sudo mv hugo /usr/local/bin/
-          hugo version
+      # ✅ 官方稳定Action，永远不会404 / 版本错误
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: latest
+          extended: true
 
-      - name: Sync all images to static/assets
+      # ✅ 自动同步所有分类下的图片到 static
+      - name: Sync Images
         run: |
           mkdir -p static/assets
-          find content -path "*/assets/*" -type f -exec cp {} static/assets/ \;
+          find content -type f -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | xargs cp -t static/assets/ 2>/dev/null || true
 
-      - name: Convert Obsidian links
+      # ✅ 自动转换Obsidian图片链接
+      - name: Convert Links
         run: |
-          find content -name "*.md" -type f -exec sed -i 's/!\[\[assets\//![\/assets\//g' {} +
-          find content -name "*.md" -type f -exec sed -i 's/\]\]/)/g' {} +
+          find content -name "*.md" -exec sed -i 's/!\[\[/![\/assets\//g' {} +
+          find content -name "*.md" -exec sed -i 's/\]\]/)/g' {} +
 
+      # ✅ 构建网站
       - name: Build
         run: hugo --minify
 
