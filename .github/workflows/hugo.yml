@@ -19,21 +19,18 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Install Hugo 0.145.0 (Manual)
+      - name: Install Hugo 0.145.0
         run: |
-          # 强制下载官方最新版 Hugo 扩展版
           wget https://github.com/gohugoio/hugo/releases/download/v0.145.0/hugo_extended_0.145.0_linux_amd64.tar.gz
           tar -xzf hugo_extended_0.145.0_linux_amd64.tar.gz
-          # 把 Hugo 移动到系统路径
           sudo mv hugo /usr/local/bin/
-          # 查看版本，确认成功
           hugo version
 
-      - name: Build the site
+      - name: Build
         run: hugo --minify
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload
+        uses: upload-pages-artifact@v3
         with:
           path: ./public
 
@@ -41,5 +38,5 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+      - name: Deploy
+        uses: deploy-pages@v4
