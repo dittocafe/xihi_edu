@@ -4,9 +4,15 @@ title = 'Xihi留学伴读手记'
 theme = 'blowfish'
 
 [params]
-  navbarlogo = '/assets/xihi-logo.png'  # 如有logo放这里
   description = '一位美本家长长期主义留学笔记'
-  
+
+[params.homepage]
+  layout = "profile"  # 或 "card" "hero"
+  showRecent = true
+  showRecentItems = 5
+  showMoreLink = true
+  showMoreLinkDest = "/posts/"
+
 [menu]
   [[menu.main]]
     name = '首页'
