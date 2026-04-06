@@ -1,24 +1,33 @@
 ---
 title: "Xihi留学伴读手记"
-description: "一位美本家长长期主义留学笔记：择校拆解、规划指南、资源工具箱"
-layout: "list"
-sortBy: "date"
-paginate: 6
+description: "一位美本家长长期主义留学笔记"
+listing:
+  layout: "grid"
+  showMeta: true
+  type: "compact"
 ---
+
+# Xihi留学伴读手记
 
 一位美本家长的**长期主义留学笔记**。
 
-你发的新文章会**自动按日期排序显示在这里 ↓**
+**所有文章自动显示 ↓**（按日期排序）
 
----
+<hr>
 
 ## 🏗️ 快速导航
 
-| 栏目 | 内容 |
-| ---- | ---- |
-| [高中择校](/posts/schools/) | 北京公立/民办国际部深度拆解 |
-| [规划指南](/posts/planning/) | 时间轴、背景提升逻辑 |
-| [资源工具箱](/toolkit/) | 官网链接、排名、政策索引 |
-
----
-*站长：Xihi | [微信交流](mailto:xihi@example.com) | [投稿建议](https://xihi.pub/contact/)*
+<div class="flex flex-wrap justify-center gap-4">
+  <a href="/posts/journal/" class="btn ph4 pv3 br2 shadow-hover navy bg-animate hover-bg-light-blue white no-underline f5 fw6">
+    📖 伴读手记
+  </a>
+  <a href="/posts/schools/" class="btn ph4 pv3 br2 shadow-hover green bg-animate hover-bg-light-green white no-underline f5 fw6">
+    🏫 高中择校
+  </a>
+  <a href="/posts/planning/" class="btn ph4 pv3 br2 shadow-hover purple bg-animate hover-bg-light-purple white no-underline f5 fw6">
+    📋 规划指南
+  </a>
+  <a href="/toolkit/" class="btn ph4 pv3 br2 shadow-hover orange bg-animate hover-bg-light-orange white no-underline f5 fw6">
+    🧰 资源工具箱
+  </a>
+</div>
