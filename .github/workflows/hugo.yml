@@ -40,19 +40,9 @@ jobs:
           hugo-version: latest
           extended: true
 
-      - name: Prepare asset directory
+      - name: Convert Obsidian image links (page bundle)
         run: |
-          mkdir -p static/assets
-
-      - name: Copy post images to static/assets
-        run: |
-          if [ -d "content/posts/assets" ]; then
-            find content/posts/assets -type f -exec cp {} static/assets/ \;
-          fi
-
-      - name: Convert Obsidian image links
-        run: |
-          find content/posts -name "*.md" -type f -exec sed -i -E ' s#!\[\[([^]]+\.(png|jpg|jpeg|gif|webp|svg|PNG|JPG|JPEG|GIF|WEBP|SVG))\]\]#![](assets/\1)#g ' {} +
+          find content/posts -name "*.md" -type f -exec sed -i 's/\!\[\[assets\/\([^]]*\)\]\]/!\[\1](assets\/\1)/g' {} +
 
       - name: Build with Hugo
         env:
