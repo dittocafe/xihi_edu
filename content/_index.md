@@ -1,33 +1,26 @@
 ---
 title: "Xihi留学伴读手记"
-description: "一位美本家长长期主义留学笔记"
-listing:
-  layout: "grid"
-  showMeta: true
-  type: "compact"
 ---
 
-# Xihi留学伴读手记
 
 一位美本家长的**长期主义留学笔记**。
 
-**所有文章自动显示 ↓**（按日期排序）
+## 最新文章
 
-<hr>
+{{ $pages := .Site.RegularPages.ByDate.Reverse }}
+{{ range first 5 $pages }}
+### {{ .Title }}
+[{{ .Title }}]({{ .Permalink }})  
+*{{ .Date.Format "2006年1月2日" }}*
 
-## 🏗️ 快速导航
+{{ .Summary | plainify | truncate 100 }}...
 
-<div class="flex flex-wrap justify-center gap-4">
-  <a href="/posts/journal/" class="btn ph4 pv3 br2 shadow-hover navy bg-animate hover-bg-light-blue white no-underline f5 fw6">
-    📖 伴读手记
-  </a>
-  <a href="/posts/schools/" class="btn ph4 pv3 br2 shadow-hover green bg-animate hover-bg-light-green white no-underline f5 fw6">
-    🏫 高中择校
-  </a>
-  <a href="/posts/planning/" class="btn ph4 pv3 br2 shadow-hover purple bg-animate hover-bg-light-purple white no-underline f5 fw6">
-    📋 规划指南
-  </a>
-  <a href="/toolkit/" class="btn ph4 pv3 br2 shadow-hover orange bg-animate hover-bg-light-orange white no-underline f5 fw6">
-    🧰 资源工具箱
-  </a>
-</div>
+---
+{{ end }}
+
+## 栏目导航
+
+- [📖 伴读手记](/posts/journal/)
+- [🏫 高中择校](/posts/schools/)
+- [📋 规划指南](/posts/planning/)
+- [🧰 资源工具箱](/toolkit/)
