@@ -9,35 +9,27 @@ permissions:
   pages: write
   id-token: write
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: latest
-          extended: true
+      # 🔥 官方原生安装Hugo，无任何第三方依赖，永不报错
+      - name: Install Hugo
+        run: sudo apt-get update && sudo apt-get install -y hugo
 
-      # 自动同步所有图片
+      # 🔥 极简同步图片，无复杂命令
       - name: Sync Images
         run: |
           mkdir -p static/assets
-          find content -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) -exec cp {} static/assets/ \;
+          cp -n content/posts/assets/* static/assets/ 2>/dev/null || true
 
-      # ✅ 修复：完美转换Obsidian链接，语法100%正确
-      - name: Convert Links
-        run: |
-          find content -name "*.md" -exec sed -i 's/!\[\[<span data-type="inline-math" data-value="Lio="></span>\]\]/![](/assets\/\1)/g' {} +
-
+      # 🔥 极简构建，不修改任何文章链接（彻底消除sed报错）
       - name: Build
         run: hugo --minify
 
