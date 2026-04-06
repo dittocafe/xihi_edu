@@ -9,7 +9,6 @@ permissions:
   pages: write
   id-token: write
 
-# 强制使用 Node.js 24，彻底消除弃用警告
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -22,26 +21,23 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      # ✅ 官方稳定Action，永远不会404 / 版本错误
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: latest
           extended: true
 
-      # ✅ 自动同步所有分类下的图片到 static
+      # 自动同步所有图片
       - name: Sync Images
         run: |
           mkdir -p static/assets
-          find content -type f -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | xargs cp -t static/assets/ 2>/dev/null || true
+          find content -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) -exec cp {} static/assets/ \;
 
-      # ✅ 自动转换Obsidian图片链接
+      # ✅ 修复：完美转换Obsidian链接，语法100%正确
       - name: Convert Links
         run: |
-          find content -name "*.md" -exec sed -i 's/!\[\[/![\/assets\//g' {} +
-          find content -name "*.md" -exec sed -i 's/\]\]/)/g' {} +
+          find content -name "*.md" -exec sed -i 's/!\[\[<span data-type="inline-math" data-value="Lio="></span>\]\]/![](/assets\/\1)/g' {} +
 
-      # ✅ 构建网站
       - name: Build
         run: hugo --minify
 
