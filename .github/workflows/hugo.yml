@@ -52,7 +52,7 @@ jobs:
 
       - name: Convert Obsidian image links
         run: |
-          find content/posts -name "*.md" -type f -exec sed -i -E 's#!\[\[([^]]+\.(png|jpg|jpeg|gif|webp|svg|PNG|JPG|JPEG|GIF|WEBP|SVG))\]\]#![](/assets/\1)#g' {} +
+          find content/posts -name "*.md" -type f -exec sed -i -E 's#!\[\[([^]]+\.(png|jpg|jpeg|gif|webp|svg|PNG|JPG|JPEG|GIF|WEBP|SVG))\]\]#![](../../assets/\1)#g' {} +
 
       - name: Build with Hugo
         env:
