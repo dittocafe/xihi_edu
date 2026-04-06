@@ -1,0 +1,45 @@
+baseURL = "/"
+title = "Xihi 留学伴读手记"
+theme = "blowfish"
+defaultContentLanguage = "zh"
+
+[languages.zh]
+languageCode = "zh-CN"
+languageName = "简体中文"
+weight = 1
+
+[params]
+colorScheme = "blowfish"
+defaultTheme = "light"
+mainSections = ["posts"]
+
+[menu]
+[[menu.main]]
+identifier = "home"
+name = "首页"
+url = "/"
+weight = 10
+
+[[menu.main]]
+identifier = "guide"
+name = "新手指南"
+url = "/categories/新手指南/"
+weight = 20
+
+[[menu.main]]
+identifier = "school"
+name = "择校拆解"
+url = "/categories/择校拆解/"
+weight = 30
+
+[[menu.main]]
+identifier = "background"
+name = "背景提升"
+url = "/categories/背景提升/"
+weight = 40
+
+[[menu.main]]
+identifier = "timeline"
+name = "时间轴规划"
+url = "/categories/时间轴规划/"
+weight = 50
