@@ -1,4 +1,4 @@
-name: Deploy Hugo (Auto Sync Images & Links)
+name: Deploy Hugo
 
 on:
   push:
@@ -13,39 +13,35 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v5
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: "latest"
-          extended: true
+      - name: Install Hugo
+        run: |
+          wget -O hugo.tar.gz https://github.com/gohugoio/hugo/releases/download/v0.145.0/hugo_extended_0.145.0_linux_amd64.tar.gz
+          tar -xzf hugo.tar.gz
+          sudo mv hugo /usr/local/bin/
+          hugo version
 
-      # 👇 核心1：自动把 content/posts/assets/ 的图片同步到 static/assets/
-      - name: 同步图片到 static/assets
+      - name: Sync all images to static/assets
         run: |
           mkdir -p static/assets
-          cp -r content/posts/assets/* static/assets/
-          # 同步所有子目录的图片（如果有）
-          find content/posts -type d -name "assets" -exec cp -r {}/* static/assets/ \;
+          find content -path "*/assets/*" -type f -exec cp {} static/assets/ \;
 
-      # 👇 核心2：自动转换Obsidian图片链接，从 [[content/posts/assets/xxx.png]] 转成 [](sslocal://flow/file_open?url=%2Fassets%2Fxxx.png&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
-      - name: 自动转换图片链接为Hugo格式
+      - name: Convert Obsidian links
         run: |
-          # 匹配 Obsidian 自动生成的 assets 路径，统一转成 /assets/
-          find content -name "*.md" -type f -exec sed -i 's/!\[\[content\/posts\/assets\//g' {} +
-          find content -name "*.md" -type f -exec sed -i 's/!\[\[assets\//g' {} +
+          find content -name "*.md" -type f -exec sed -i 's/!\[\[assets\//![\/assets\//g' {} +
           find content -name "*.md" -type f -exec sed -i 's/\]\]/)/g' {} +
-          find content -name "*.md" -type f -exec sed -i 's/!\[\[/!\[\/assets\//g' {} +
 
-      - name: Build site
-        run: hugo --minify --gc --cleanDestinationDir
+      - name: Build
+        run: hugo --minify
 
-      - name: Upload artifact
+      - name: Upload
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
@@ -54,5 +50,5 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: actions/deploy-pages@v4
