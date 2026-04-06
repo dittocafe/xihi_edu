@@ -7,34 +7,44 @@ theme = 'blowfish'
   description = '一位美本家长长期主义留学笔记'
 
 [params.homepage]
-  layout = "profile"  # 或 "card" "hero"
+  layout = 'card'
+  homepageImage = '/assets/cover.jpg'  # 可选封面图
   showRecent = true
   showRecentItems = 5
   showMoreLink = true
-  showMoreLinkDest = "/posts/"
+  showMoreLinkDest = '/posts/journal/'
+  cardView = true
+
+[params.article]
+  showHero = true
 
 [menu]
   [[menu.main]]
+    identifier = 'home'
     name = '首页'
     url = '/'
     weight = 1
     
   [[menu.main]]
+    identifier = 'journal'
     name = '伴读手记'
     url = '/posts/journal/'
     weight = 2
     
   [[menu.main]]
+    identifier = 'schools'
     name = '高中择校'
     url = '/posts/schools/'
     weight = 3
     
   [[menu.main]]
+    identifier = 'planning'
     name = '规划指南'
     url = '/posts/planning/'
     weight = 4
     
   [[menu.main]]
+    identifier = 'toolkit'
     name = '资源工具箱'
     url = '/toolkit/'
     weight = 5
