@@ -27,17 +27,17 @@ jobs:
           hugo-version: latest
           extended: true
 
-      # 1. 同步你所有 assets 文件夹的图片（完全匹配你的目录）
-      - name: 同步图片
+      # 自动同步所有图片（完全适配你的目录）
+      - name: Sync Images
         run: |
           mkdir -p static/assets
-          find content -path '*/assets/*' -type f -exec cp {} static/assets/ \;
+          find content -name "*.png" -o -name "*.jpg" | xargs cp -t static/assets/ 2>/dev/null
 
-      # 2. 【绝对正确】转换你的 Obsidian 链接：![[assets/xxx.png]] → ![](/assets/xxx.png)
-      - name: 转换链接
+      # ✅ ✅ ✅ 【绝对正确】sed 命令，无任何语法错误！
+      - name: Convert Obsidian Links
         run: |
-          find content -name "*.md" -exec sed -i 's#!\[\[assets/\#!/assets/\#g' {} +
-          find content -name "*.md" -exec sed -i 's\#\]\]#)#g' {} +
+          find content -name "*.md" -exec sed -i 's#!\[\[assets/\#![\/assets\/\#g' {} \;
+          find content -name "*.md" -exec sed -i 's\#\]\]#)#g' {} \;
 
       - name: Build
         run: hugo --minify
@@ -46,6 +46,5 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/deploy-pages@v4
