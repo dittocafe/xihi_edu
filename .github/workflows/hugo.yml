@@ -9,7 +9,6 @@ permissions:
   pages: write
   id-token: write
 
-# 消除Node警告
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -22,35 +21,31 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      # ✅ 官方Hugo，永不404，兼容所有主题
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: latest
           extended: true
 
-      # ✅ 自动同步所有文章/所有分类的图片（支持无限目录）
-      - name: 同步所有图片到 static/assets
+      # 1. 同步你所有 assets 文件夹的图片（完全匹配你的目录）
+      - name: 同步图片
         run: |
           mkdir -p static/assets
-          find content -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -exec cp {} static/assets/ \;
+          find content -path '*/assets/*' -type f -exec cp {} static/assets/ \;
 
-      # ✅ 极简安全替换！永不报错！自动转Obsidian链接为网页链接
-      - name: 自动转换图片链接
+      # 2. 【绝对正确】转换你的 Obsidian 链接：![[assets/xxx.png]] → ![](/assets/xxx.png)
+      - name: 转换链接
         run: |
-          find content -name "*.md" -type f -exec sed -i 's#!\[\[\#![](/assets/\#g' {} +
-          find content -name "*.md" -type f -exec sed -i 's\#\]\]#)#g' {} +
+          find content -name "*.md" -exec sed -i 's#!\[\[assets/\#!/assets/\#g' {} +
+          find content -name "*.md" -exec sed -i 's\#\]\]#)#g' {} +
 
-      # ✅ 构建网站
       - name: Build
         run: hugo --minify
 
-      - name: Upload
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
-        uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v4
