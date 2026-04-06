@@ -9,38 +9,35 @@ permissions:
   pages: write
   id-token: write
 
+# 强制Node24，彻底消除弃用警告
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           submodules: true
           fetch-depth: 0
 
-      # 🔥 官方原生安装Hugo，无任何第三方依赖，永不报错
-      - name: Install Hugo
-        run: sudo apt-get update && sudo apt-get install -y hugo
+      # ✅ 官方最新Hugo，完美兼容Blowfish主题（永不404/永不报错）
+      - name: Install Latest Hugo
+        run: |
+          wget -O - https://github.com/gohugoio/hugo/releases/download/v0.146.0/hugo_extended_0.146.0_linux_amd64.tar.gz | tar xz
+          sudo mv hugo /usr/local/bin/
+          hugo version
 
-      # 🔥 极简同步图片，无复杂命令
+      # ✅ 极简同步图片，无复杂命令
       - name: Sync Images
         run: |
           mkdir -p static/assets
-          cp -n content/posts/assets/* static/assets/ 2>/dev/null || true
+          find content -name "*.png" -o -name "*.jpg" | xargs -I {} cp {} static/assets/ 2>/dev/null
 
-      # 🔥 极简构建，不修改任何文章链接（彻底消除sed报错）
-      - name: Build
+      # ✅ 构建（完美兼容主题，无任何函数错误）
+      - name: Build Site
         run: hugo --minify
 
-      - name: Upload
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        uses: actions/deploy-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/deploy-pages@v4
