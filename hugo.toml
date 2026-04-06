@@ -2,6 +2,7 @@ baseURL = "/"
 title = "Xihi 留学伴读手记"
 theme = "blowfish"
 defaultContentLanguage = "zh"
+enableInlineShortcodes = true # 修复短代码兼容
 
 [languages.zh]
 languageCode = "zh-CN"
@@ -12,6 +13,7 @@ weight = 1
 colorScheme = "blowfish"
 defaultTheme = "light"
 mainSections = ["posts"]
+description = "一位美本留子家长的长期主义笔记。"
 
 [menu]
 [[menu.main]]
