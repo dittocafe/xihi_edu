@@ -27,24 +27,27 @@ jobs:
           hugo-version: latest
           extended: true
 
-      # 自动同步所有图片（完全适配你的目录）
+      # 自动同步所有图片
       - name: Sync Images
         run: |
           mkdir -p static/assets
-          find content -name "*.png" -o -name "*.jpg" | xargs cp -t static/assets/ 2>/dev/null
+          find content -path "*/assets/*" -type f -exec cp {} static/assets/ \;
 
-      # ✅ ✅ ✅ 【绝对正确】sed 命令，无任何语法错误！
-      - name: Convert Obsidian Links
+      # 【绝对正确】转换 Obsidian 链接
+      - name: Convert Links
         run: |
-          find content -name "*.md" -exec sed -i 's#!\[\[assets/\#![\/assets\/\#g' {} \;
+          find content -name "*.md" -exec sed -i 's#!\[\[assets/\#![](/assets/\#g' {} \;
           find content -name "*.md" -exec sed -i 's\#\]\]#)#g' {} \;
 
       - name: Build
         run: hugo --minify
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload
+        uses: actions/upload-pages-artifact@v3
 
   deploy:
     needs: build
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
