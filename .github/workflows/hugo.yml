@@ -1,7 +1,9 @@
-name: Deploy Hugo
+name: Deploy Hugo site to Pages
+
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -9,17 +11,28 @@ permissions:
   pages: write
   id-token: write
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
         with:
           submodules: true
           fetch-depth: 0
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -27,27 +40,42 @@ jobs:
           hugo-version: latest
           extended: true
 
-      # 自动同步所有图片
-      - name: Sync Images
+      - name: Prepare asset directory
         run: |
           mkdir -p static/assets
-          find content -path "*/assets/*" -type f -exec cp {} static/assets/ \;
 
-      # 【绝对正确】转换 Obsidian 链接
-      - name: Convert Links
+      - name: Copy post images to static/assets
         run: |
-          find content -name "*.md" -exec sed -i 's#!\[\[assets/\#![](/assets/\#g' {} \;
-          find content -name "*.md" -exec sed -i 's\#\]\]#)#g' {} \;
+          if [ -d "content/posts/assets" ]; then
+            find content/posts/assets -type f -exec cp {} static/assets/ \;
+          fi
 
-      - name: Build
-        run: hugo --minify
+      - name: Convert Obsidian image links
+        run: |
+          find content/posts -name "*.md" -type f -exec sed -i -E 's#!\[\[([^]]+\.(png|jpg|jpeg|gif|webp|svg|PNG|JPG|JPEG|GIF|WEBP|SVG))\]\]#![](/assets/\1)#g' {} +
 
-      - name: Upload
+      - name: Build with Hugo
+        env:
+          HUGO_ENVIRONMENT: production
+        run: |
+          hugo \
+            --gc \
+            --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
 
   deploy:
-    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    needs: build
+
     steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
