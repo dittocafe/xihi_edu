@@ -1,8 +1,11 @@
-baseURL = "/"
+# 核心：必须配置正确的 baseURL，末尾加 /
+baseURL = "https://dittocafe.github.io/xihi_edu/"
 title = "Xihi 留学伴读手记"
 theme = "blowfish"
 defaultContentLanguage = "zh"
-enableInlineShortcodes = true # 修复短代码兼容
+enableInlineShortcodes = true
+# 强制开启资源指纹，解决加载问题
+resourceTypes = ["css", "js", "image"]
 
 [languages.zh]
 languageCode = "zh-CN"
@@ -14,6 +17,8 @@ colorScheme = "blowfish"
 defaultTheme = "light"
 mainSections = ["posts"]
 description = "一位美本留子家长的长期主义笔记。"
+# 修复导航栏渲染
+header = { sticky = true, showThemeToggle = true }
 
 [menu]
 [[menu.main]]
