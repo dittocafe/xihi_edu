@@ -40,9 +40,9 @@ jobs:
           hugo-version: latest
           extended: true
 
-      - name: Convert Obsidian image links (page bundle)
+      - name: Convert Obsidian image links (leaf bundle)
         run: |
-          find content/posts -name "*.md" -type f -exec sed -i 's/\!\[\[assets\/\([^]]*\)\]\]/!\[\1](assets\/\1)/g' {} +
+          find content/posts -name "*.md" -type f -exec sed -i 's/!\[\[assets\/\([^]]*\.[^.]*\)\]\]/!\[\1](assets\/\1)/g' {} \;
 
       - name: Build with Hugo
         env:
