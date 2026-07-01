@@ -59,6 +59,15 @@ const nav = [
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
     {updatedTime && <meta property="article:modified_time" content={updatedTime} />}
     <script type="application/ld+json" set:html={structuredData}></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5N4FTMS47F"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-5N4FTMS47F");
+    </script>
     <title>{title}</title>
   </head>
   <body>
