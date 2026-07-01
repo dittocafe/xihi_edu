@@ -14,7 +14,13 @@ const { article } = Astro.props;
 const { Content } = await article.render();
 ---
 
-<BaseLayout title={`${article.data.title} | Xihi留学伴读手记`} description={article.data.summary}>
+<BaseLayout
+  title={`${article.data.title} | Xihi留学伴读手记`}
+  description={article.data.summary}
+  type="article"
+  publishedTime={article.data.date.toISOString()}
+  updatedTime={article.data.updated.toISOString()}
+>
   <article class="article">
     <header class="article-header">
       <div class="meta">

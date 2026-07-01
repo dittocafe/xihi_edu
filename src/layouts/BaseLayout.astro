@@ -2,8 +2,16 @@
 import "../styles/global.css";
 import SearchBox from "../components/SearchBox.astro";
 
-const { title = "Xihi留学伴读手记", description = "面向家长的美本与英美路径决策知识库" } = Astro.props;
+const {
+  title = "Xihi留学伴读手记",
+  description = "面向家长的美本与英美路径决策知识库",
+  type = "website",
+  publishedTime,
+  updatedTime
+} = Astro.props;
 const basePath = "/";
+const siteUrl = "https://edu.bjxihi.com";
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
 const nav = [
   ["时间线", "/timeline"],
@@ -23,6 +31,18 @@ const nav = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:site_name" content="Xihi留学伴读手记" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {updatedTime && <meta property="article:modified_time" content={updatedTime} />}
     <title>{title}</title>
   </head>
   <body>
