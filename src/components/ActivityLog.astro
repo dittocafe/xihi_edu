@@ -1,6 +1,6 @@
 ---
 const { articles } = Astro.props;
-const basePath = "/xihi_edu/";
+const basePath = "/";
 
 const sorted = [...articles].sort((a, b) => b.data.updated.getTime() - a.data.updated.getTime());
 const latest = sorted.slice(0, 5);

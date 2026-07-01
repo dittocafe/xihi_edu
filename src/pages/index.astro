@@ -11,7 +11,7 @@ const pinned = articles
   .sort((a, b) => (a.data.pinned_order ?? 999) - (b.data.pinned_order ?? 999))
   .slice(0, 3);
 const coverArticle = articles.find((article) => article.data.cover) ?? pinned[0];
-const basePath = "/xihi_edu/";
+const basePath = "/";
 ---
 
 <BaseLayout title="Xihi留学伴读手记">
