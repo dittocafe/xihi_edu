@@ -1,0 +1,48 @@
+---
+import "../styles/global.css";
+import SearchBox from "../components/SearchBox.astro";
+
+const { title = "Xihi留学伴读手记", description = "面向家长的美本与英美路径决策知识库" } = Astro.props;
+
+const nav = [
+  ["时间线", "/timeline"],
+  ["美本", "/us"],
+  ["美研", "/grad"],
+  ["家长决策", "/decisions"],
+  ["资源库", "/resources"],
+  ["资料库", "/library"],
+  ["英国", "/uk"],
+  ["关于", "/about"]
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <nav class="nav" aria-label="主导航">
+          <a class="brand" href="/">Xihi留学伴读手记</a>
+          <div class="nav-links">
+            {nav.map(([label, href]) => <a href={href}>{label}</a>)}
+          </div>
+          <SearchBox compact id="site-search-header" />
+        </nav>
+      </header>
+      <main>
+        <slot />
+      </main>
+      <footer class="footer">
+        <div class="footer-inner">
+          面向家长的美本与英美路径决策知识库。先整理信息，再形成判断。
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

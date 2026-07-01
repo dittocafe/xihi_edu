@@ -1,0 +1,89 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import ActivityLog from "../components/ActivityLog.astro";
+import { getCollection } from "astro:content";
+
+const articles = (await getCollection("articles")).filter((article) => article.data.public);
+const today = new Date();
+const pinned = articles
+  .filter((article) => article.data.pinned && (!article.data.pinned_until || article.data.pinned_until >= today))
+  .sort((a, b) => (a.data.pinned_order ?? 999) - (b.data.pinned_order ?? 999))
+  .slice(0, 3);
+const coverArticle = articles.find((article) => article.data.cover) ?? pinned[0];
+---
+
+<BaseLayout title="Xihi留学伴读手记">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">面向家长的美本与英美路径决策知识库</p>
+      <h1>Xihi留学伴读手记</h1>
+      <p class="lead">从北京/上海资源视角整理信息，也照顾外地家庭借助北上资源申请美本的真实场景。先把问题讲清楚，再决定是否行动。</p>
+    </div>
+    <aside class="hero-note">
+      当前小样聚焦美本，英国方向先搭框架。内容按目的地、孩子阶段、家长问题和北上资源交叉组织。
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">本月家长关注</p>
+        <h2>7月先看节奏和暑期沉淀</h2>
+      </div>
+      <p>10年级关注夏校和活动是否沉淀，11年级关注标化、选校和顾问沟通，12年级关注申请材料节奏。</p>
+    </div>
+    <div class="routes">
+      <a class="route" href="/timeline"><strong>按阶段进入</strong><span>9年级、10年级、11年级、12年级、美研</span></a>
+      <a class="route" href="/us"><strong>美本伴读</strong><span>当前主线，先跑通内容体系</span></a>
+      <a class="route" href="/uk"><strong>英国方向</strong><span>先理解英美差异和 UCAS 逻辑</span></a>
+      <a class="route" href="/resources"><strong>资源库</strong><span>北京、上海和外地家庭如何借力</span></a>
+    </div>
+  </section>
+
+  <ActivityLog articles={articles} />
+
+  {coverArticle && (
+    <section class="section cover-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">本期封面文章</p>
+          <h2>{coverArticle.data.title}</h2>
+        </div>
+        <p>{coverArticle.data.summary}</p>
+      </div>
+      <a class="cover-panel" href={`/articles/${coverArticle.data.permalink}`}>
+        <div>
+          <div class="meta">
+            {coverArticle.data.destination.map((item) => <span class="tag accent">{item}</span>)}
+            {coverArticle.data.student_stage.slice(0, 3).map((item) => <span class="tag">{item}</span>)}
+            {coverArticle.data.topics.slice(0, 3).map((item) => <span class="tag">{item}</span>)}
+          </div>
+          <h3>为什么选它做封面</h3>
+          <p>{coverArticle.data.cover_reason || coverArticle.data.parent_takeaway}</p>
+        </div>
+        <div class="cover-reasons">
+          <strong>这篇适合你，如果你正在想：</strong>
+          <ul>
+            {(coverArticle.data.cover_points.length ? coverArticle.data.cover_points : [coverArticle.data.parent_takeaway]).map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+          <span class="cover-link">阅读全文</span>
+        </div>
+      </a>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">置顶专题</p>
+        <h2>先建立判断框架</h2>
+      </div>
+    </div>
+    <div class="grid">
+      {pinned.map((article) => <ArticleCard article={article} />)}
+    </div>
+  </section>
+</BaseLayout>

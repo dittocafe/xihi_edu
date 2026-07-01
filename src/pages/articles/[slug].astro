@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("articles");
+  return articles.map((article) => ({
+    params: { slug: article.data.permalink },
+    props: { article }
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await article.render();
+---
+
+<BaseLayout title={`${article.data.title} | Xihi留学伴读手记`} description={article.data.summary}>
+  <article class="article">
+    <header class="article-header">
+      <div class="meta">
+        {article.data.destination.map((item) => <span class="tag accent">{item}</span>)}
+        {article.data.student_stage.map((item) => <span class="tag">{item}</span>)}
+        {article.data.topics.map((item) => <span class="tag">{item}</span>)}
+      </div>
+      <h1>{article.data.title}</h1>
+      <p class="lead">{article.data.summary}</p>
+      <p><strong>家长要点：</strong>{article.data.parent_takeaway}</p>
+    </header>
+    <div class="article-content">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

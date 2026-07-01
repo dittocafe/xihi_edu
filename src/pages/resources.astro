@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getCollection } from "astro:content";
+
+const articles = (await getCollection("articles")).filter((article) => article.data.resource_lens.length > 0);
+---
+
+<BaseLayout title="北上资源 | Xihi留学伴读手记">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">北京 / 上海 / 外地家庭</p>
+      <h1>北上资源</h1>
+      <p class="lead">北上资源不是地域优越感，而是信息、顾问、学校路径和家长圈的密集样本。这里关注如何借力，也关注如何不被信息差带着走。</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="routes">
+      <div class="route"><strong>北京资源</strong><span>国际部、国际校、线下讲座、顾问样本</span></div>
+      <div class="route"><strong>上海资源</strong><span>国际化学校、课程体系、英美路径比较</span></div>
+      <div class="route"><strong>外地家庭</strong><span>如何远程借力北上资源</span></div>
+      <div class="route"><strong>资源辨析</strong><span>避免信息差、话术和焦虑营销</span></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="grid">
+      {articles.map((article) => <ArticleCard article={article} />)}
+    </div>
+  </section>
+</BaseLayout>

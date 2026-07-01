@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getCollection } from "astro:content";
+
+const articles = (await getCollection("articles")).filter((article) => article.data.public);
+---
+
+<BaseLayout title="资料库 | Xihi留学伴读手记">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">待扩展</p>
+      <h1>资料库</h1>
+      <p class="lead">后续放政策、考试、申请节点、公众号来源解读、官方链接和常用清单。第一版先保留入口。</p>
+    </div>
+  </section>
+
+  <section class="section" data-library-section>
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">主题索引</p>
+        <h2 data-library-title>全部文章</h2>
+      </div>
+    </div>
+    <div class="grid" data-library-grid>
+      {articles.map((article) => (
+        <div data-topics={article.data.topics.join(",")}>
+          <ArticleCard article={article} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const tag = params.get("tag");
+    const title = document.querySelector("[data-library-title]");
+    const cards = [...document.querySelectorAll("[data-topics]")];
+
+    if (tag && title) {
+      title.textContent = `主题：${tag}`;
+      cards.forEach((card) => {
+        const topics = card.getAttribute("data-topics") || "";
+        card.hidden = !topics.split(",").includes(tag);
+      });
+    }
+  </script>
+</BaseLayout>

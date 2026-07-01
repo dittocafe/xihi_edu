@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getCollection } from "astro:content";
+
+const articles = (await getCollection("articles")).filter((article) => article.data.destination.includes("英国"));
+---
+
+<BaseLayout title="英国方向 | Xihi留学伴读手记">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">先搭框架</p>
+      <h1>英国方向</h1>
+      <p class="lead">英国本科更早指向专业和课程体系。第一阶段先放英美比较、UCAS、A-Level/IB/AP和路径选择。</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="grid">
+      {articles.map((article) => <ArticleCard article={article} />)}
+    </div>
+  </section>
+</BaseLayout>

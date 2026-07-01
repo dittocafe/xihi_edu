@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getCollection } from "astro:content";
+
+const articles = await getCollection("articles");
+const stages = [
+  { label: "9年级", id: "grade-9" },
+  { label: "10年级", id: "grade-10" },
+  { label: "11年级", id: "grade-11" },
+  { label: "12年级", id: "grade-12" },
+  { label: "美研", id: "grad" }
+];
+---
+
+<BaseLayout title="时间线 | Xihi留学伴读手记">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">按孩子阶段进入</p>
+      <h1>伴读时间线</h1>
+      <p class="lead">家长通常不是按知识分类行动，而是在某个年级、某个月份遇到问题。时间线用来回答“现在该关注什么”。</p>
+      <div class="stage-nav" aria-label="时间线阶段导航">
+        {stages.map((stage) => <a href={`#${stage.id}`}>{stage.label}</a>)}
+      </div>
+    </div>
+  </section>
+  {stages.map((stage) => {
+    const items = stage.label === "美研"
+      ? articles.filter((article) => article.data.track.includes("美研"))
+      : articles.filter((article) => article.data.student_stage.includes(stage.label));
+    return (
+      <section class="section" id={stage.id}>
+        <div class="section-head">
+          <h2>{stage.label}</h2>
+        </div>
+        {items.length ? (
+          <div class="grid">
+            {items.map((article) => <ArticleCard article={article} />)}
+          </div>
+        ) : (
+          <div class="empty-note">
+            {stage.label === "美研"
+              ? "美研时间线先保留入口，后续补充本科期间规划、方向选择、科研/实习、推荐信和申请节点。"
+              : "这个阶段的文章还在整理中。"}
+          </div>
+        )}
+      </section>
+    );
+  })}
+</BaseLayout>

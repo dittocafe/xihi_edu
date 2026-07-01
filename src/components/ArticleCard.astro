@@ -1,0 +1,15 @@
+---
+const { article } = Astro.props;
+const data = article.data;
+const href = `/articles/${data.permalink}`;
+---
+
+<a class="card" href={href}>
+  <div class="meta">
+    {data.destination.map((item) => <span class="tag accent">{item}</span>)}
+    {data.student_stage.slice(0, 2).map((item) => <span class="tag">{item}</span>)}
+    {data.topics.slice(0, 2).map((item) => <span class="tag">{item}</span>)}
+  </div>
+  <h3>{data.title}</h3>
+  <p>{data.summary}</p>
+</a>

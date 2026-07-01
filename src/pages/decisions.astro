@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getCollection } from "astro:content";
+
+const articles = (await getCollection("articles")).filter((article) =>
+  article.data.topics.some((topic) => ["顾问选择", "家长决策", "机构辨析", "夏校", "英美比较"].includes(topic))
+);
+---
+
+<BaseLayout title="家长决策 | Xihi留学伴读手记">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">决策方法</p>
+      <h1>家长决策</h1>
+      <p class="lead">不替机构做广告，也不制造焦虑。这里放的是家长判断问题时可反复使用的方法。</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="grid">
+      {articles.map((article) => <ArticleCard article={article} />)}
+    </div>
+  </section>
+</BaseLayout>

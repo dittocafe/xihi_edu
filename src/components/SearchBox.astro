@@ -1,0 +1,81 @@
+---
+const { compact = false, id = "site-search" } = Astro.props;
+---
+
+<div class:list={["search-box", { compact }]} data-search-box>
+  <label class="search-label" for={id}>搜索知识库</label>
+  <div class="search-row">
+    <input id={id} type="search" placeholder="搜索顾问、夏校、英美、北上资源..." autocomplete="off" data-search-input />
+  </div>
+  <div class="search-results" data-search-results hidden></div>
+</div>
+
+<script>
+  const boxes = document.querySelectorAll("[data-search-box]");
+
+  async function loadIndex() {
+    const response = await fetch("/search.json");
+    return response.json();
+  }
+
+  const indexPromise = loadIndex().catch(() => []);
+
+  function normalize(value) {
+    return String(value || "").trim().toLowerCase();
+  }
+
+  function renderResults(container, items, query) {
+    if (!query) {
+      container.hidden = true;
+      container.innerHTML = "";
+      return;
+    }
+
+    if (!items.length) {
+      container.hidden = false;
+      container.innerHTML = `<div class="search-empty">没有找到相关内容</div>`;
+      return;
+    }
+
+    container.hidden = false;
+    container.innerHTML = items
+      .slice(0, 6)
+      .map((item) => `
+        <a class="search-result" href="${item.url}">
+          <strong>${item.title}</strong>
+          <span>${item.summary}</span>
+        </a>
+      `)
+      .join("");
+  }
+
+  boxes.forEach((box) => {
+    const input = box.querySelector("[data-search-input]");
+    const results = box.querySelector("[data-search-results]");
+    if (!(input instanceof HTMLInputElement) || !(results instanceof HTMLElement)) return;
+
+    input.addEventListener("input", async () => {
+      const query = normalize(input.value);
+      const terms = query.split(/\s+/).filter(Boolean);
+      const index = await indexPromise;
+      const matches = index.filter((item) => {
+        const haystack = normalize([
+          item.title,
+          item.summary,
+          item.parent_takeaway,
+          item.destination?.join(" "),
+          item.student_stage?.join(" "),
+          item.topics?.join(" ")
+        ].join(" "));
+        return terms.every((term) => haystack.includes(term));
+      });
+      renderResults(results, matches, query);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!box.contains(event.target)) {
+        results.hidden = true;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,43 @@
+---
+const { articles } = Astro.props;
+
+const sorted = [...articles].sort((a, b) => b.data.updated.getTime() - a.data.updated.getTime());
+const latest = sorted.slice(0, 5);
+const tags = [...new Set(sorted.flatMap((article) => article.data.topics))]
+  .slice(0, 14)
+  .map((tag) => ({
+    label: tag,
+    href: `/library?tag=${encodeURIComponent(tag)}`
+  }));
+---
+
+<section class="section activity-section">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">更新日志</p>
+      <h2>这个知识库会持续长出来</h2>
+    </div>
+    <p>左侧记录最近整理和修订，右侧按主题进入。后续发布、复核和补充资料，都会自然沉淀到这些主题里。</p>
+  </div>
+  <div class="activity-layout">
+    <div class="activity-list">
+      {latest.map((article) => (
+        <a href={`/articles/${article.data.permalink}`} class="activity-item">
+          <span></span>
+          <div>
+            <strong>{article.data.title}</strong>
+            <small>{article.data.updated.toLocaleDateString("zh-CN")} 更新</small>
+          </div>
+        </a>
+      ))}
+    </div>
+    <div class="activity-side">
+      <div class="tag-cloud" aria-label="主题标签导航">
+        <div class="tag-cloud-title">按主题继续看</div>
+        <div class="tag-cloud-links">
+          {tags.map((tag) => <a href={tag.href}>{tag.label}</a>)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
