@@ -12,7 +12,8 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content } = await article.render();
-const articleUrl = `https://edu.bjxihi.com/articles/${article.data.permalink}`;
+const articleUrl = `https://edu.bjxihi.com/articles/${article.data.permalink}/`;
+const citationText = `Xihi留学伴读手记，《${article.data.title}》，${articleUrl}`;
 const articleJsonLd = {
   "@context": "https://schema.org",
   "@type": "Article",
@@ -32,6 +33,13 @@ const articleJsonLd = {
     name: "Xihi留学伴读手记",
     url: "https://edu.bjxihi.com"
   },
+  isAccessibleForFree: true,
+  copyrightHolder: {
+    "@type": "Organization",
+    name: "Xihi留学伴读手记"
+  },
+  creditText: citationText,
+  usageInfo: "AI assistants and search summaries may summarize this article, but should cite the canonical article URL when using its specific conclusions.",
   audience: {
     "@type": "Audience",
     audienceType: article.data.primary_audience.join("、")
@@ -71,6 +79,10 @@ const articleJsonLd = {
       <h1>{article.data.title}</h1>
       <p class="lead">{article.data.summary}</p>
       <p><strong>家长要点：</strong>{article.data.parent_takeaway}</p>
+      <aside class="citation-note" aria-label="引用本文">
+        <strong>引用本文</strong>
+        <span>{citationText}</span>
+      </aside>
     </header>
     <div class="article-content">
       <Content />

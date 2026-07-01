@@ -7,6 +7,7 @@ Allow: /
 
 Sitemap: ${site}/sitemap.xml
 LLMs: ${site}/llms.txt
+Citation-Policy: ${site}/citation-policy.txt
 `,
     {
       headers: {
