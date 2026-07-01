@@ -1,8 +1,9 @@
 ---
 const { compact = false, id = "site-search" } = Astro.props;
+const basePath = "/xihi_edu/";
 ---
 
-<div class:list={["search-box", { compact }]} data-search-box>
+<div class:list={["search-box", { compact }]} data-search-box data-base={basePath}>
   <label class="search-label" for={id}>搜索知识库</label>
   <div class="search-row">
     <input id={id} type="search" placeholder="搜索顾问、夏校、英美、北上资源..." autocomplete="off" data-search-input />
@@ -13,18 +14,16 @@ const { compact = false, id = "site-search" } = Astro.props;
 <script>
   const boxes = document.querySelectorAll("[data-search-box]");
 
-  async function loadIndex() {
-    const response = await fetch("/search.json");
+  async function loadIndex(base) {
+    const response = await fetch(`${base}search.json`);
     return response.json();
   }
-
-  const indexPromise = loadIndex().catch(() => []);
 
   function normalize(value) {
     return String(value || "").trim().toLowerCase();
   }
 
-  function renderResults(container, items, query) {
+  function renderResults(container, items, query, base) {
     if (!query) {
       container.hidden = true;
       container.innerHTML = "";
@@ -41,7 +40,7 @@ const { compact = false, id = "site-search" } = Astro.props;
     container.innerHTML = items
       .slice(0, 6)
       .map((item) => `
-        <a class="search-result" href="${item.url}">
+        <a class="search-result" href="${base}${item.url.replace(/^\//, "")}">
           <strong>${item.title}</strong>
           <span>${item.summary}</span>
         </a>
@@ -53,6 +52,8 @@ const { compact = false, id = "site-search" } = Astro.props;
     const input = box.querySelector("[data-search-input]");
     const results = box.querySelector("[data-search-results]");
     if (!(input instanceof HTMLInputElement) || !(results instanceof HTMLElement)) return;
+    const base = box.getAttribute("data-base") || "/";
+    const indexPromise = loadIndex(base).catch(() => []);
 
     input.addEventListener("input", async () => {
       const query = normalize(input.value);
@@ -69,7 +70,7 @@ const { compact = false, id = "site-search" } = Astro.props;
         ].join(" "));
         return terms.every((term) => haystack.includes(term));
       });
-      renderResults(results, matches, query);
+      renderResults(results, matches, query, base);
     });
 
     document.addEventListener("click", (event) => {

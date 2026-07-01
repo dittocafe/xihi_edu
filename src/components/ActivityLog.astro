@@ -1,5 +1,6 @@
 ---
 const { articles } = Astro.props;
+const basePath = "/xihi_edu/";
 
 const sorted = [...articles].sort((a, b) => b.data.updated.getTime() - a.data.updated.getTime());
 const latest = sorted.slice(0, 5);
@@ -7,7 +8,7 @@ const tags = [...new Set(sorted.flatMap((article) => article.data.topics))]
   .slice(0, 14)
   .map((tag) => ({
     label: tag,
-    href: `/library?tag=${encodeURIComponent(tag)}`
+    href: `${basePath}library?tag=${encodeURIComponent(tag)}`
   }));
 ---
 
@@ -22,7 +23,7 @@ const tags = [...new Set(sorted.flatMap((article) => article.data.topics))]
   <div class="activity-layout">
     <div class="activity-list">
       {latest.map((article) => (
-        <a href={`/articles/${article.data.permalink}`} class="activity-item">
+        <a href={`${basePath}articles/${article.data.permalink}`} class="activity-item">
           <span></span>
           <div>
             <strong>{article.data.title}</strong>

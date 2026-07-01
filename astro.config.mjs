@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://xihi.example.com"
+  site: "https://dittocafe.github.io",
+  base: "/xihi_edu"
 });

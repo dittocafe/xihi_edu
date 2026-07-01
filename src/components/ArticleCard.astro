@@ -1,7 +1,8 @@
 ---
 const { article } = Astro.props;
 const data = article.data;
-const href = `/articles/${data.permalink}`;
+const basePath = "/xihi_edu/";
+const href = `${basePath}articles/${data.permalink}`;
 ---
 
 <a class="card" href={href}>
