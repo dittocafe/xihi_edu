@@ -12,6 +12,45 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content } = await article.render();
+const articleUrl = `https://edu.bjxihi.com/articles/${article.data.permalink}`;
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: article.data.title,
+  description: article.data.summary,
+  url: articleUrl,
+  mainEntityOfPage: articleUrl,
+  datePublished: article.data.date.toISOString(),
+  dateModified: article.data.updated.toISOString(),
+  inLanguage: "zh-CN",
+  author: {
+    "@type": "Person",
+    name: "Xihi留学伴读手记"
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Xihi留学伴读手记",
+    url: "https://edu.bjxihi.com"
+  },
+  audience: {
+    "@type": "Audience",
+    audienceType: article.data.primary_audience.join("、")
+  },
+  about: [
+    ...article.data.destination,
+    ...article.data.student_stage,
+    ...article.data.topics,
+    ...article.data.decision_type
+  ],
+  keywords: [
+    ...article.data.destination,
+    ...article.data.student_stage,
+    ...article.data.topics,
+    ...article.data.season,
+    ...article.data.family_location
+  ].join(", "),
+  abstract: article.data.parent_takeaway
+};
 ---
 
 <BaseLayout
@@ -20,6 +59,7 @@ const { Content } = await article.render();
   type="article"
   publishedTime={article.data.date.toISOString()}
   updatedTime={article.data.updated.toISOString()}
+  jsonLd={articleJsonLd}
 >
   <article class="article">
     <header class="article-header">

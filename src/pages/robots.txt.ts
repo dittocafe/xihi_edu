@@ -6,6 +6,7 @@ export function GET() {
 Allow: /
 
 Sitemap: ${site}/sitemap.xml
+LLMs: ${site}/llms.txt
 `,
     {
       headers: {

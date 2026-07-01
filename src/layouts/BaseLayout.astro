@@ -7,11 +7,26 @@ const {
   description = "面向家长的美本与英美路径决策知识库",
   type = "website",
   publishedTime,
-  updatedTime
+  updatedTime,
+  jsonLd
 } = Astro.props;
 const basePath = "/";
 const siteUrl = "https://edu.bjxihi.com";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const structuredData = JSON.stringify(
+  jsonLd ?? {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Xihi留学伴读手记",
+    url: siteUrl,
+    inLanguage: "zh-CN",
+    description,
+    audience: {
+      "@type": "Audience",
+      audienceType: "关注美本、美研和英美留学路径的中国家长"
+    }
+  }
+).replace(/</g, "\\u003c");
 
 const nav = [
   ["时间线", "/timeline"],
@@ -43,6 +58,7 @@ const nav = [
     <meta name="twitter:description" content={description} />
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
     {updatedTime && <meta property="article:modified_time" content={updatedTime} />}
+    <script type="application/ld+json" set:html={structuredData}></script>
     <title>{title}</title>
   </head>
   <body>
