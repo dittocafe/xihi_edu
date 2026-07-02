@@ -20,6 +20,13 @@ urgency: "长期有效"
 decision_type: ["如何选择"]
 cross_destination: true
 source_type: "原创样文"
+pathways: ["high_school", "resources"]
+stages: ["grade_9", "grade_10", "grade_11"]
+destinations: ["us", "uk", "cross_region"]
+audiences: ["parents"]
+decision_topics: ["curriculum", "school_choice", "college_list"]
+resource_types: ["school_info", "official_info", "beijing_resources", "shanghai_resources"]
+content_role: "explainer"
 summary: "英本更早指向专业和课程体系，美本更强调综合评价和探索空间，家长需要尽早理解两套系统的差别。"
 parent_takeaway: "英美可以比较，但不能用同一套逻辑判断。"
 ---

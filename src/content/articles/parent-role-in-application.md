@@ -22,6 +22,13 @@ urgency: "长期有效"
 decision_type: ["如何陪伴"]
 cross_destination: false
 source_type: "原创样文"
+pathways: ["high_school"]
+stages: ["grade_10", "grade_11", "grade_12"]
+destinations: ["us"]
+audiences: ["parents"]
+decision_topics: ["parent_role", "parent_child_communication", "mental_health"]
+resource_types: ["parent_community"]
+content_role: "opinion"
 summary: "家长适合管理节奏、资源和风险，但不适合替孩子完成表达、选择和成长。"
 parent_takeaway: "家长越清楚自己的边界，孩子越可能真正进入申请。"
 ---

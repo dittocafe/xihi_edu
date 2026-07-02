@@ -2,29 +2,63 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ArticleCard from "../components/ArticleCard.astro";
 import { getCollection } from "astro:content";
+import { resourceTypeLabels, relatedArticles } from "../lib/taxonomy";
 
-const articles = (await getCollection("articles")).filter((article) => article.data.resource_lens.length > 0);
+const articles = await getCollection("articles");
+const resourceGroups = [
+  ["beijing_resources", "北京资源", "国际部、线下讲座、顾问样本和家庭信息流。"],
+  ["shanghai_resources", "上海资源", "国际化学校、课程体系和英美路径比较。"],
+  ["nonlocal_family", "外地家庭", "远程借力北上资源时，判断服务半径和沟通质量。"],
+  ["consultant", "顾问资源", "不先问哪家最好，先判断家庭真正缺什么。"],
+  ["summer_program", "夏校资源", "看课程强度、孩子适配和后续沉淀，不只看名校标签。"],
+  ["research_program", "科研项目", "判断孩子是否真实参与，是否能转化为能力和表达。"],
+  ["official_info", "官方信息", "用来校准申请规则、截止日期和项目要求。"],
+  ["parent_community", "家长社群", "获取经验样本，也要避免被焦虑情绪带着走。"]
+];
 ---
 
-<BaseLayout title="北上资源 | Xihi留学伴读手记">
+<BaseLayout title="资源库 | Xihi留学伴读手记" description="按地域、阶段和资源类型整理留学相关信息，帮助家长判断资源是否适合自己家。">
   <section class="hero">
     <div>
-      <p class="eyebrow">北京 / 上海 / 外地家庭</p>
-      <h1>北上资源</h1>
-      <p class="lead">北上资源不是地域优越感，而是信息、顾问、学校路径和家长圈的密集样本。这里关注如何借力，也关注如何不被信息差带着走。</p>
+      <p class="eyebrow">资源判断库</p>
+      <h1>资源库</h1>
+      <p class="lead">这里不做简单网址大全，而是整理资源类型、适合阶段、判断问题和常见误区。家长缺的往往不是链接，而是知道这个资源是否适合自己家。</p>
     </div>
   </section>
   <section class="section">
     <div class="routes">
-      <div class="route"><strong>北京资源</strong><span>国际部、国际校、线下讲座、顾问样本</span></div>
-      <div class="route"><strong>上海资源</strong><span>国际化学校、课程体系、英美路径比较</span></div>
-      <div class="route"><strong>外地家庭</strong><span>如何远程借力北上资源</span></div>
-      <div class="route"><strong>资源辨析</strong><span>避免信息差、话术和焦虑营销</span></div>
+      <div class="route"><strong>按地域看</strong><span>北京 / 上海 / 外地借北上 / 线上</span></div>
+      <div class="route"><strong>按阶段看</strong><span>9-12年级 / 本科 / 陆本申研</span></div>
+      <div class="route"><strong>按类型看</strong><span>标化 / 夏校 / 科研 / 顾问 / 实习</span></div>
+      <div class="route"><strong>按问题看</strong><span>适合谁、何时用、怎么避坑</span></div>
     </div>
   </section>
   <section class="section">
-    <div class="grid">
-      {articles.map((article) => <ArticleCard article={article} />)}
+    <div class="roadmap-stage-list">
+      {resourceGroups.map(([type, title, body]) => {
+        const matches = relatedArticles(articles, {
+          pathway: "resources",
+          resourceTypes: [type],
+          limit: 4
+        });
+
+        return (
+          <article class="roadmap-stage" id={type}>
+            <div class="stage-kicker">{resourceTypeLabels[type] ?? title}</div>
+            <div>
+              <h2>{title}</h2>
+              <p class="muted-copy">{body}</p>
+              {matches.length > 0 ? (
+                <div class="grid related-grid">
+                  {matches.map((article) => <ArticleCard article={article} />)}
+                </div>
+              ) : (
+                <div class="empty-note">这个资源类型还在整理中，后续文章会自动出现在这里。</div>
+              )}
+            </div>
+          </article>
+        );
+      })}
     </div>
   </section>
 </BaseLayout>

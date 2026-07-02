@@ -4,6 +4,9 @@ const site = "https://edu.bjxihi.com";
 
 const staticPages = [
   "",
+  "high-school-roadmap",
+  "undergraduate-roadmap",
+  "mainland-to-grad-roadmap",
   "timeline",
   "us",
   "grad",
@@ -11,7 +14,10 @@ const staticPages = [
   "resources",
   "library",
   "uk",
-  "about"
+  "about",
+  "statement",
+  "contact",
+  "contact-thanks"
 ];
 
 function escapeXml(value: string) {

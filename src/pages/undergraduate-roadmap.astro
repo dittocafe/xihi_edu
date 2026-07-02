@@ -1,0 +1,180 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getCollection } from "astro:content";
+import { relatedArticles } from "../lib/taxonomy";
+
+const articles = await getCollection("articles");
+
+const years = [
+  {
+    year: "大一",
+    stageKey: "college_year_1",
+    common: "适应大学、GPA、选课、生活独立、专业探索",
+    parent: "先看孩子是否适应，不急着把四年规划填满。",
+    employment: "了解行业和校园资源，建立简历意识，不急于追求名企实习。",
+    graduate: "保持GPA，探索课程和学术兴趣，开始认识教授和院系结构。"
+  },
+  {
+    year: "大二",
+    stageKey: "college_year_2",
+    common: "专业逐渐确认、能力积累、暑期规划",
+    parent: "观察孩子是偏就业、偏研究，还是仍在探索。",
+    employment: "寻找第一段相关经历，做项目、社团、校内工作或暑期实习。",
+    graduate: "接触科研、找教授、参加项目，判断是职业型硕士还是研究型路径。"
+  },
+  {
+    year: "大三",
+    stageKey: "college_year_3",
+    common: "路径分水岭，就业或升学逐渐清晰",
+    parent: "帮助孩子做信息校准和风险预案，不替孩子决定方向。",
+    employment: "核心实习、暑期实习、networking、行业选择和秋招准备。",
+    graduate: "GRE/GMAT、推荐人、科研成果、项目筛选和申请节奏启动。"
+  },
+  {
+    year: "大四",
+    stageKey: "college_year_4",
+    common: "求职、研究生申请、毕业和身份安排",
+    parent: "帮助比较方案，但最终选择要由孩子承担。",
+    employment: "全职求职、offer比较、身份/签证、城市选择、回国或留美。",
+    graduate: "递交申请、offer比较、奖学金、导师或项目选择。"
+  }
+];
+
+const articlesForYear = (stageKey: string) =>
+  relatedArticles(articles, {
+    pathway: "undergraduate",
+    stages: [stageKey],
+    limit: 3
+  });
+
+const employmentArticles = relatedArticles(articles, {
+  pathway: "undergraduate",
+  decisionTopics: ["career", "internship"],
+  limit: 3
+});
+
+const graduateArticles = relatedArticles(articles, {
+  pathway: "undergraduate",
+  decisionTopics: ["graduate_school", "phd"],
+  limit: 3
+});
+
+const graduateTypes = [
+  {
+    title: "硕士/职业型研究生",
+    suitable: "适合提升就业竞争力、转换方向、延长准备期或补足专业训练。",
+    judge: "重点看项目质量、就业出口、地理位置、成本和ROI。"
+  },
+  {
+    title: "读博/研究型路径",
+    suitable: "适合有持续研究兴趣、科研经历、推荐人和长期投入意愿的孩子。",
+    judge: "重点看导师匹配、研究方向、长期不确定性和孩子是否真正愿意。"
+  }
+];
+---
+
+<BaseLayout title="本科阶段全景图 | Xihi留学伴读手记" description="从大一到大四，面向家长梳理本科阶段就业和升学两条路径。">
+  <section class="hero roadmap-hero">
+    <div>
+      <p class="eyebrow">本科阶段全景图</p>
+      <h1>从大一到大四，分清就业和升学路径</h1>
+      <p class="lead">进入大学不是终点。家长的角色会从申请陪跑，转成信息支持、风险识别、资源连接和情绪支持。</p>
+    </div>
+    <aside class="hero-note">
+      本科四年要同时看共同主线和方向分叉：先适应，再积累，最后在就业、硕士或读博之间做更清醒的选择。
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="roadmap-timeline" aria-label="本科阶段时间线">
+      {years.map((item) => (
+        <a href={`#${item.year}`} class="timeline-chip">
+          <span>{item.year}</span>
+          <small>{item.common}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="roadmap-stage-list">
+      {years.map((item) => (
+        <article class="roadmap-stage" id={item.year}>
+          <div class="stage-kicker">{item.year}</div>
+          <div>
+            <h2>{item.common}</h2>
+            <div class="roadmap-columns undergraduate-columns">
+              <div>
+                <h3>家长要看什么</h3>
+                <p>{item.parent}</p>
+              </div>
+              <div>
+                <h3>就业方向</h3>
+                <p>{item.employment}</p>
+              </div>
+              <div>
+                <h3>升学方向</h3>
+                <p>{item.graduate}</p>
+              </div>
+            </div>
+            {
+              articlesForYear(item.stageKey).length > 0 && (
+                <div class="related-block">
+                  <h3>这个阶段可继续读</h3>
+                  <div class="grid related-grid">
+                    {articlesForYear(item.stageKey).map((article) => <ArticleCard article={article} />)}
+                  </div>
+                </div>
+              )
+            }
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section split-section">
+    <div>
+      <p class="eyebrow">方向一</p>
+      <h2>就业路径</h2>
+      <p>就业不是大四才开始。专业、实习、身份、城市、行业周期都会影响结果。家长能帮的是信息、资源和风险预案，不是替孩子找人生答案。</p>
+      <div class="step-list">
+        <div><strong>大一</strong><span>了解行业，建立简历意识。</span></div>
+        <div><strong>大二</strong><span>拿到第一段相关经历。</span></div>
+        <div><strong>大三</strong><span>核心实习和行业选择。</span></div>
+        <div><strong>大四</strong><span>全职offer、身份和城市取舍。</span></div>
+      </div>
+      {employmentArticles.length > 0 && (
+        <div class="related-block">
+          <h3>就业方向可继续读</h3>
+          <div class="grid related-grid">
+            {employmentArticles.map((article) => <ArticleCard article={article} />)}
+          </div>
+        </div>
+      )}
+    </div>
+    <div>
+      <p class="eyebrow">方向二</p>
+      <h2>升学路径</h2>
+      <p>升学不是单纯延迟就业。职业型硕士看出口和成本，读博看研究兴趣和导师匹配，两条路的判断逻辑很不一样。</p>
+      <div class="grid two compact-grid">
+        {graduateTypes.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <p>{item.suitable}</p>
+            <p>{item.judge}</p>
+          </article>
+        ))}
+      </div>
+      {graduateArticles.length > 0 && (
+        <div class="related-block">
+          <h3>升学方向可继续读</h3>
+          <div class="grid related-grid">
+            {graduateArticles.map((article) => <ArticleCard article={article} />)}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

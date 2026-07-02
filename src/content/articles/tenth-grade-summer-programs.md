@@ -20,6 +20,13 @@ urgency: "本季关注"
 decision_type: ["是否行动", "如何选择"]
 cross_destination: false
 source_type: "原创样文"
+pathways: ["high_school", "resources"]
+stages: ["grade_10"]
+destinations: ["us"]
+audiences: ["parents"]
+decision_topics: ["summer_program", "activities", "research", "budget"]
+resource_types: ["summer_program", "beijing_resources", "shanghai_resources", "online_resources"]
+content_role: "seasonal"
 summary: "夏校不是越贵越好，也不是有大学名字就有申请价值，关键看孩子阶段、课程强度和后续沉淀。"
 parent_takeaway: "夏校要服务孩子的能力建设和方向探索，而不是服务家长的安心感。"
 ---

@@ -18,6 +18,11 @@ export async function GET() {
 
 - URL: ${new URL(`/articles/${data.permalink}`, site).toString()}
 - Updated: ${data.updated.toISOString().slice(0, 10)}
+- Pathways: ${formatList(data.pathways)}
+- Standard stages: ${formatList(data.stages)}
+- Decision topics: ${formatList(data.decision_topics)}
+- Resource types: ${formatList(data.resource_types)}
+- Content role: ${data.content_role}
 - Audience: ${formatList(data.primary_audience)}
 - Student stage: ${formatList(data.student_stage)}
 - Destination: ${formatList(data.destination)}

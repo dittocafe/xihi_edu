@@ -1,0 +1,153 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getCollection } from "astro:content";
+import { relatedArticles } from "../lib/taxonomy";
+
+const articles = await getCollection("articles");
+
+const stages = [
+  {
+    grade: "9年级",
+    stageKey: "grade_9",
+    focus: "中考、选校、体系选择",
+    student: "确认高中体系，打好英语、阅读、写作和学习习惯。",
+    parent: "判断公立国际部、民办、国际学校是否适配孩子，也判断家庭预算和陪跑强度。",
+    actions: ["中考与公立选校", "英语能力评估", "课程体系判断", "家庭预算和节奏共识"],
+    traps: "只看学校名气，不看孩子是否适应体系、强度和同伴环境。"
+  },
+  {
+    grade: "10年级",
+    stageKey: "grade_10",
+    focus: "标化启蒙、适应高中、兴趣探索",
+    student: "稳定校内成绩，开始标化准备，尝试活动、项目或科研方向。",
+    parent: "判断是否需要顾问介入，活动和科研是该启动还是先把基础打稳。",
+    actions: ["TOEFL/IELTS 起步", "校内GPA稳定", "AP 1-2门", "活动试水", "阅读写作积累"],
+    traps: "过早堆科研、竞赛、夏校，把项目数量误认为申请竞争力。"
+  },
+  {
+    grade: "11年级",
+    stageKey: "grade_11",
+    focus: "标化冲刺、活动成型、成果沉淀",
+    student: "标化尽量出分，科研、竞赛、项目或活动形成可讲述的线索。",
+    parent: "判断申请方向是否清晰，顾问是否补足家庭短板，ED策略是否有雏形。",
+    actions: ["SAT/ACT和语言考试", "AP 2-3门", "暑假夏校", "推荐人关系", "文书素材积累", "初步选校"],
+    traps: "把忙碌误认为有效，忽略孩子真正能解释和承担的成长线。"
+  },
+  {
+    grade: "12年级",
+    stageKey: "grade_12",
+    focus: "申请执行、早申、常规申、offer选择",
+    student: "完成文书、活动表、推荐信、面试和申请提交，参与学校取舍。",
+    parent: "判断申请组合是否合理，结果分布是否可接受，孩子是否真正参与选择。",
+    actions: ["ED/EA/RD策略", "主文书和附加文书", "推荐信", "面试", "奖学金", "签证和住宿"],
+    traps: "家长替孩子申请，或者把选校简化成排名高低。"
+  }
+];
+
+const articlesForStage = (stageKey: string) =>
+  relatedArticles(articles, {
+    pathway: "high_school",
+    stages: [stageKey],
+    limit: 3
+  });
+
+const lenses = [
+  {
+    title: "北京家庭视角",
+    body: "北京资源密集，国际部、课程、活动、顾问和同伴信息都来得快。优势是选择多，风险是焦虑也被放大。家长需要区分资源优势和机构节奏。"
+  },
+  {
+    title: "外地家庭借北上资源",
+    body: "外地家庭可以借北京、上海的顾问、课程、夏校信息和规划经验，但不能把距离造成的信息差误认为专业壁垒。要看服务半径、沟通质量和孩子所在学校体系。"
+  },
+  {
+    title: "家长边界",
+    body: "家长适合管理节奏、资源、预算和风险；孩子需要逐渐接管表达、选择和承担。申请不是家长项目管理的胜利，而是孩子开始处理自己人生的练习。"
+  }
+];
+---
+
+<BaseLayout title="高中阶段全景图 | Xihi留学伴读手记" description="从9年级到12年级，面向家长梳理美本申请节奏、北京资源和家庭决策边界。">
+  <section class="hero roadmap-hero">
+    <div>
+      <p class="eyebrow">高中阶段全景图</p>
+      <h1>从9年级到12年级，看懂美本申请节奏</h1>
+      <p class="lead">这个页面不是申请清单，而是给家长看的阶段判断地图。先知道孩子在哪个阶段，再判断哪些事该提前理解，哪些事不用过早焦虑。</p>
+    </div>
+    <aside class="hero-note">
+      北京家庭和外地家庭借北上资源，面对的是同一套申请系统，但信息密度、学校体系和家庭支持方式并不一样。
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="roadmap-timeline" aria-label="高中阶段时间线">
+      {stages.map((stage) => (
+        <a href={`#${stage.grade}`} class="timeline-chip">
+          <span>{stage.grade}</span>
+          <small>{stage.focus}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="roadmap-stage-list">
+      {stages.map((stage) => (
+        <article class="roadmap-stage" id={stage.grade}>
+          <div class="stage-kicker">{stage.grade}</div>
+          <div>
+            <h2>{stage.focus}</h2>
+            <div class="roadmap-columns">
+              <div>
+                <h3>学生主线</h3>
+                <p>{stage.student}</p>
+              </div>
+              <div>
+                <h3>家长要判断</h3>
+                <p>{stage.parent}</p>
+              </div>
+              <div>
+                <h3>关键动作</h3>
+                <ul>
+                  {stage.actions.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+              <div>
+                <h3>常见误区</h3>
+                <p>{stage.traps}</p>
+              </div>
+            </div>
+            {
+              articlesForStage(stage.stageKey).length > 0 && (
+                <div class="related-block">
+                  <h3>这个阶段可继续读</h3>
+                  <div class="grid related-grid">
+                    {articlesForStage(stage.stageKey).map((article) => <ArticleCard article={article} />)}
+                  </div>
+                </div>
+              )
+            }
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">三条判断线</p>
+        <h2>同一个阶段，不同家庭要看的重点不一样</h2>
+      </div>
+    </div>
+    <div class="grid">
+      {lenses.map((lens) => (
+        <article class="card">
+          <h3>{lens.title}</h3>
+          <p>{lens.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

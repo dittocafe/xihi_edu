@@ -32,6 +32,21 @@ const articles = defineCollection({
     source_type: z.string(),
     source_name: z.string().optional(),
     source_url: z.string().optional(),
+    source_refs: z.array(z.object({
+      source_name: z.string(),
+      source_type: z.string(),
+      original_title: z.string().optional(),
+      original_url: z.string().optional(),
+      date_seen: z.string().optional(),
+      usage: z.string().optional()
+    })).default([]),
+    pathways: z.array(z.string()).default([]),
+    stages: z.array(z.string()).default([]),
+    destinations: z.array(z.string()).default([]),
+    audiences: z.array(z.string()).default(["parents"]),
+    decision_topics: z.array(z.string()).default([]),
+    resource_types: z.array(z.string()).default([]),
+    content_role: z.string().default("framework"),
     summary: z.string(),
     parent_takeaway: z.string()
   })

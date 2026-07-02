@@ -23,6 +23,13 @@ urgency: "长期有效"
 decision_type: ["如何选择", "避坑判断"]
 cross_destination: false
 source_type: "原创样文"
+pathways: ["high_school", "resources"]
+stages: ["grade_9", "grade_10", "grade_11"]
+destinations: ["us"]
+audiences: ["parents"]
+decision_topics: ["consultant", "parent_role", "budget"]
+resource_types: ["consultant", "beijing_resources", "shanghai_resources", "nonlocal_family"]
+content_role: "framework"
 summary: "选择顾问机构前，家长应先判断自己家庭需要的是规划、执行、文书、信息校准还是情绪支持。"
 parent_takeaway: "不要先问哪家机构最好，先问自己家到底缺哪一块。"
 ---

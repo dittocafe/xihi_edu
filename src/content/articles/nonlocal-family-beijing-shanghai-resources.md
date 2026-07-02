@@ -28,6 +28,13 @@ urgency: "长期有效"
 decision_type: ["如何选择", "避坑判断"]
 cross_destination: false
 source_type: "原创样文"
+pathways: ["high_school", "resources"]
+stages: ["grade_9", "grade_10", "grade_11"]
+destinations: ["us"]
+audiences: ["parents"]
+decision_topics: ["consultant", "school_choice", "budget"]
+resource_types: ["nonlocal_family", "beijing_resources", "shanghai_resources", "consultant"]
+content_role: "framework"
 summary: "外地家庭可以借助北上资源，但需要先判断孩子所处学校体系、家庭沟通方式和顾问服务半径是否匹配。"
 parent_takeaway: "北上资源有价值，但不能把距离造成的信息差误认为专业壁垒。"
 ---

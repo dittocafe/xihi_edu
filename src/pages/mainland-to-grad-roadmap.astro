@@ -1,0 +1,191 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getCollection } from "astro:content";
+import { relatedArticles } from "../lib/taxonomy";
+
+const articles = await getCollection("articles");
+
+const years = [
+  {
+    year: "大一",
+    stageKey: "college_year_1",
+    common: "适应大学、保GPA、了解专业",
+    parent: "判断孩子是否适合本专业，是否需要转专业、辅修或提前补英语。",
+    actions: ["GPA优先", "英语基础", "课程选择", "了解海外项目", "建立信息文件夹"]
+  },
+  {
+    year: "大二",
+    stageKey: "college_year_2",
+    common: "专业能力积累、初步方向选择",
+    parent: "初步判断孩子更像职业型硕士路径，还是研究型/博士路径。",
+    actions: ["语言准备", "科研/竞赛/项目", "第一段实习", "主动找老师", "了解目标地区"]
+  },
+  {
+    year: "大三",
+    stageKey: "college_year_3",
+    common: "申请核心准备期",
+    parent: "目标地区和项目要逐渐清晰，短板要具体到GPA、语言、科研、实习或推荐信。",
+    actions: ["IELTS/TOEFL", "GRE/GMAT", "科研或实习成果", "推荐人", "选校清单"]
+  },
+  {
+    year: "大四",
+    stageKey: "college_year_4",
+    common: "递交申请、offer选择",
+    parent: "比较offer时不要只看排名，也要看成本、出口、城市和孩子真实适配。",
+    actions: ["文书", "推荐信", "网申", "面试", "奖学金", "签证和住宿"]
+  }
+];
+
+const paths = [
+  {
+    title: "职业型硕士",
+    focus: "GPA、语言、实习、项目、学校背景和职业目标。",
+    suitable: "适合想提升就业竞争力、转换方向、补强学历平台的学生。",
+    topics: ["graduate_school", "career", "internship"]
+  },
+  {
+    title: "研究型/博士",
+    focus: "科研经历、论文/项目、推荐信、导师匹配和研究兴趣。",
+    suitable: "适合有科研耐心和学术兴趣，愿意长期投入的学生。",
+    topics: ["graduate_school", "phd", "research", "recommendation"]
+  }
+];
+
+const regions = [
+  ["美国", "硕士/博士逻辑不同，项目差异大，要看成本、奖学金、就业和身份路径。"],
+  ["英国", "授课型硕士多，一年制常见，要看GPA、院校背景、专业匹配和就业出口。"],
+  ["香港/新加坡", "距离近、申请竞争强，GPA、实习、语言和申请轮次都要早。"],
+  ["欧洲", "费用可能更友好，但语言、课程匹配、项目认可度和长期规划差异大。"]
+];
+
+const traps = [
+  "只看排名，不看项目出口和家庭成本。",
+  "以为大四再准备来得及，忽略GPA和推荐信的长期积累。",
+  "把读研当作就业缓冲，却没有明确能力补足目标。",
+  "不区分职业型硕士和读博路径。",
+  "考研、留学、就业三线作战，但没有主次和止损点。"
+];
+
+const articlesForYear = (stageKey: string) =>
+  relatedArticles(articles, {
+    pathway: "mainland_to_grad",
+    stages: [stageKey],
+    limit: 3
+  });
+---
+
+<BaseLayout title="陆本申研全景图 | Xihi留学伴读手记" description="从大一到大四，面向国内本科家庭梳理海外硕士和博士申请路径。">
+  <section class="hero roadmap-hero">
+    <div>
+      <p class="eyebrow">陆本申研全景图</p>
+      <h1>从国内本科到海外硕士/博士，怎么提前准备</h1>
+      <p class="lead">陆本申请海外研究生，不只是大四递交材料。GPA、语言、科研/实习、推荐信和方向判断，都会在大一到大三逐步积累。</p>
+    </div>
+    <aside class="hero-note">
+      这个页面关注中国大陆本科学生申请海外研究生。它不替代考研、保研判断，而是帮家庭看清海外申请这条线。
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="roadmap-timeline" aria-label="陆本申研时间线">
+      {years.map((item) => (
+        <a href={`#${item.year}`} class="timeline-chip">
+          <span>{item.year}</span>
+          <small>{item.common}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="roadmap-stage-list">
+      {years.map((item) => (
+        <article class="roadmap-stage" id={item.year}>
+          <div class="stage-kicker">{item.year}</div>
+          <div>
+            <h2>{item.common}</h2>
+            <div class="roadmap-columns undergraduate-columns">
+              <div>
+                <h3>家长要判断</h3>
+                <p>{item.parent}</p>
+              </div>
+              <div>
+                <h3>关键动作</h3>
+                <ul>
+                  {item.actions.map((action) => <li>{action}</li>)}
+                </ul>
+              </div>
+              <div>
+                <h3>可链接内容</h3>
+                <p>后续陆本申研文章会按这个阶段自动出现在这里。</p>
+              </div>
+            </div>
+            {articlesForYear(item.stageKey).length > 0 && (
+              <div class="related-block">
+                <h3>这个阶段可继续读</h3>
+                <div class="grid related-grid">
+                  {articlesForYear(item.stageKey).map((article) => <ArticleCard article={article} />)}
+                </div>
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section split-section">
+    <div>
+      <p class="eyebrow">先分清路径</p>
+      <h2>职业型硕士和研究型/博士不是一套逻辑</h2>
+      <div class="grid two compact-grid">
+        {paths.map((item) => {
+          const matches = relatedArticles(articles, {
+            pathway: "mainland_to_grad",
+            decisionTopics: item.topics,
+            limit: 3
+          });
+
+          return (
+            <article class="card">
+              <h3>{item.title}</h3>
+              <p>{item.focus}</p>
+              <p>{item.suitable}</p>
+              {matches.length > 0 && (
+                <div class="mini-links">
+                  {matches.map((article) => <a href={`/articles/${article.data.permalink}`}>{article.data.title}</a>)}
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </div>
+    </div>
+    <div>
+      <p class="eyebrow">地区差异</p>
+      <h2>不同地区不能混成一个申请逻辑</h2>
+      <div class="step-list">
+        {regions.map(([region, body]) => (
+          <div><strong>{region}</strong><span>{body}</span></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">常见误区</p>
+        <h2>陆本申研最怕晚一步才发现问题</h2>
+      </div>
+    </div>
+    <div class="grid">
+      {traps.map((trap) => (
+        <article class="card">
+          <p>{trap}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

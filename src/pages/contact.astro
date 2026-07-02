@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="联系 | Xihi留学伴读手记"
+  description="向 Xihi留学伴读手记提交反馈、资料线索或家长问题。"
+>
+  <section class="hero">
+    <div>
+      <p class="eyebrow">联系与留言</p>
+      <h1>把问题或线索留在这里</h1>
+      <p class="lead">适合反馈文章错误、补充公开资料、推荐信息源，或者简单说说你正在遇到的留学阶段问题。留言会通过第三方表单服务转发到邮箱。</p>
+    </div>
+  </section>
+
+  <section class="section contact-section">
+    <form class="contact-form" action="https://formsubmit.co/khanhbinhd10@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="Xihi留学伴读手记新留言" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_next" value="https://edu.bjxihi.com/contact-thanks/" />
+      <input type="text" name="_honey" class="hidden-field" tabindex="-1" autocomplete="off" />
+
+      <label>
+        <span>怎么称呼</span>
+        <input name="name" type="text" placeholder="可以留昵称" />
+      </label>
+
+      <label>
+        <span>邮箱或微信</span>
+        <input name="contact" type="text" placeholder="方便回复即可" required />
+      </label>
+
+      <label>
+        <span>留言类型</span>
+        <select name="type" required>
+          <option value="文章反馈">文章反馈</option>
+          <option value="资料线索">资料线索</option>
+          <option value="家长问题">家长问题</option>
+          <option value="合作/转载">合作/转载</option>
+        </select>
+      </label>
+
+      <label>
+        <span>关联文章或链接</span>
+        <input name="related_url" type="text" placeholder="可粘贴文章链接、公众号链接或网页链接" />
+      </label>
+
+      <label class="wide">
+        <span>具体内容</span>
+        <textarea name="message" rows="8" placeholder="请尽量写清楚阶段、问题背景、你希望我看什么。" required></textarea>
+      </label>
+
+      <div class="form-actions">
+        <button type="submit">提交留言</button>
+        <a href="mailto:khanhbinhd10@gmail.com?subject=Xihi%E7%95%99%E5%AD%A6%E4%BC%B4%E8%AF%BB%E6%89%8B%E8%AE%B0%E7%95%99%E8%A8%80">直接发邮件</a>
+      </div>
+
+      <p class="form-note">第一次启用表单服务时，邮箱可能会收到确认邮件；确认后后续留言会自动转发。请不要提交孩子的身份证、护照、成绩单原件等敏感信息。</p>
+    </form>
+  </section>
+</BaseLayout>

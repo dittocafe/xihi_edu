@@ -10,7 +10,12 @@ export async function GET() {
       url: `/articles/${article.data.permalink}`,
       destination: article.data.destination,
       student_stage: article.data.student_stage,
-      topics: article.data.topics
+      topics: article.data.topics,
+      pathways: article.data.pathways,
+      stages: article.data.stages,
+      decision_topics: article.data.decision_topics,
+      resource_types: article.data.resource_types,
+      content_role: article.data.content_role
     }));
 
   return new Response(JSON.stringify(articles), {
